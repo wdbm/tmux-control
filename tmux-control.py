@@ -156,6 +156,19 @@ detail mode:
 |          |          |
 -----------------------
 
+work mode:
+-----------------------
+|                     |
+|       ranger        |
+|---------------------|
+|                     |
+|      terminal       |
+|---------------------|
+|          |          |
+|  ranger  |  cmus    |
+|          |          |
+-----------------------
+
 badass mode (does not work via SSH):
 -----------------------
 | ranger   |          |
@@ -176,14 +189,14 @@ Options:
     -h, --help    display help message
     --version     display version and exit
     --analysis    analysis configuration
-    --edit        edit configuration
-    --detail      detail configuration
-    --work        work configuration
     --badass      badass configuration
+    --detail      detail configuration
+    --edit        edit configuration
+    --work        work configuration
 """
 
 name    = "tmux-control"
-version = "2015-06-18T1217Z"
+version = "2015-06-18T1646Z"
 
 import os
 import sys
@@ -462,7 +475,7 @@ def main(options):
     elif engageConfigurationBadass is True:
         configurationtmux = configurationBadass
     else:
-        configurationtmux = configurationWork
+        configurationtmux = configurationEdit
 
     command = \
         "configurationtmux=\"$(mktemp)\" && { echo \"" + \
@@ -482,8 +495,13 @@ def ensure_prerequisites(prerequisites):
 
 def instate(program):
     print("instate {program}".format(program = program))
-    command = "sudo apt-get -y install " + program
-    os.system(command)
+    if program == "hollywood":
+        os.system("sudo apt-add-repository -y ppa:hollywood/ppa")
+        os.system("sudo apt-get -y update")
+        os.system("sudo apt-get -y install byobu hollywood")
+    else:
+        command = "sudo apt-get -y install " + program
+        os.system(command)
 
 def which(program):
     def is_exe(fpath):
