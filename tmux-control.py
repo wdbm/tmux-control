@@ -85,7 +85,7 @@ which communicate through a socket in /tmp.
 |                       |exit).                                                |
 |Ctrl a d               |Detach the current client.                            |
 |Ctrl a &               |Kill the current window.                              |
---------------------------------------------------------------------------------
+|------------------------------------------------------------------------------|
 |Ctrl a c               |Create a new window.                                  |
 |Ctrl a l               |Change to the previous window.                        |
 |Ctrl a n               |Change to the next window.                            |
@@ -182,6 +182,32 @@ badass mode (does not work via SSH):
 | cmus     |          |
 -----------------------
 
+# cmus
+
+-----------------------------------------------
+|command   |action                            |
+|----------|----------------------------------|
+|:a ~/music|load music from directory         |
+|x         |start playing                     |
+|b         |next                              |
+|z         |previous                          |
+|c         |pause                             |
+|v         |stop                              |
+|r         |toggle repeat                     |
+|s         |toggle shuffle                    |
+|1         |view tree (artists and songs list)|
+|space     |expand tree                       |
+|2         |view sorted (songs list)          |
+|3         |view playlist                     |
+|4         |view queue                        |
+|5         |view browser                      |
+|6         |view filters                      |
+|7         |view settings                     |
+|right     |seek forward                      |
+|left      |seek backward                     |
+|q         |quit                              |
+-----------------------------------------------
+
 Usage:
     program [options]
 
@@ -196,7 +222,7 @@ Options:
 """
 
 name    = "tmux-control"
-version = "2015-06-18T1646Z"
+version = "2015-06-18T1651Z"
 
 import os
 import sys
@@ -206,10 +232,10 @@ def main(options):
 
     # access options and arguments
     engageConfigurationAnalysis = options["--analysis"]
-    engageConfigurationEdit     = options["--edit"]
-    engageConfigurationDetail   = options["--detail"]
-    engageConfigurationWork     = options["--work"]
     engageConfigurationBadass   = options["--badass"]
+    engageConfigurationDetail   = options["--detail"]
+    engageConfigurationEdit     = options["--edit"]
+    engageConfigurationWork     = options["--work"]
 
     # set up prerequisites
     prerequisites = [
@@ -466,14 +492,14 @@ def main(options):
 
     if engageConfigurationAnalysis is True:
         configurationtmux = configurationAnalysis
-    elif engageConfigurationEdit is True:
-        configurationtmux = configurationEdit
-    elif engageConfigurationDetail is True:
-        configurationtmux = configurationDetail
-    elif engageConfigurationWork is True:
-        configurationtmux = configurationWork
     elif engageConfigurationBadass is True:
         configurationtmux = configurationBadass
+    elif engageConfigurationDetail is True:
+        configurationtmux = configurationDetail
+    elif engageConfigurationEdit is True:
+        configurationtmux = configurationEdit
+    elif engageConfigurationWork is True:
+        configurationtmux = configurationWork
     else:
         configurationtmux = configurationEdit
 
