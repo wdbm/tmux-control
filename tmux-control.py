@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """
 ################################################################################
@@ -212,51 +213,50 @@ Usage:
     program [options]
 
 Options:
-    -h, --help    display help message
-    --version     display version and exit
-    --analysis    analysis configuration
-    --badass      badass configuration
-    --detail      detail configuration
-    --edit        edit configuration
-    --work        work configuration
+    -h, --help  display help message
+    --version   display version and exit
+    --analysis  analysis configuration
+    --badass    badass configuration
+    --detail    detail configuration
+    --edit      edit configuration
+    --work      work configuration
 """
 
 name    = "tmux-control"
-version = "2015-06-18T1651Z"
+version = "2016-08-01T1603Z"
 
+import docopt
 import os
 import sys
-import docopt
+
+import propyte
 
 def main(options):
 
-    # access options and arguments
-    engageConfigurationAnalysis = options["--analysis"]
-    engageConfigurationBadass   = options["--badass"]
-    engageConfigurationDetail   = options["--detail"]
-    engageConfigurationEdit     = options["--edit"]
-    engageConfigurationWork     = options["--work"]
+    engage_configuration_analysis = options["--analysis"]
+    engage_configuration_badass   = options["--badass"]
+    engage_configuration_detail   = options["--detail"]
+    engage_configuration_edit     = options["--edit"]
+    engage_configuration_work     = options["--work"]
 
-    # set up prerequisites
     prerequisites = [
-        "tmux",
-        "ranger",
-        "htop",
+        "cmus",
         "elinks",
-        "cmus"
+        "htop",
+        "ranger",
+        "tmux"
     ]
     ensure_prerequisites(prerequisites)
 
-    # set up executable
-    hostName = os.uname()[1]
-    if "physics.gla.ac.uk" in hostName:
-        executable = "/afs/phas.gla.ac.uk/user/w/wbm/local/bin/tmux"
-    elif "cern.ch" in hostName:
-        executable = "/afs/phas.gla.ac.uk/user/w/wbm/local/bin/tmux"
+    host_name = os.uname()[1]
+    if "cern.ch" in host_name:
+        executable = "/usr/bin/tmux"
+    elif "physics.gla.ac.uk" in host_name:
+        executable = "/usr/bin/tmux"
     else:
         executable = "tmux"
 
-    configurationAnalysis = \
+    configuration_analysis = \
     """
     set -g set-remain-on-exit on
     new -s "ANALYSIS"
@@ -296,144 +296,7 @@ def main(options):
     set -g set-remain-on-exit off
     """
 
-    configurationEdit = \
-    """
-    set -g set-remain-on-exit on
-    new -s "EDITING"
-    set-option -g prefix C-a
-    unbind C-b
-    bind - split-window -v
-    bind | split-window -h
-    ## colours
-    set-option -g window-status-current-bg yellow
-    set-option -g pane-active-border-fg yellow
-    set -g status-fg black
-    set -g status-bg '#FEFE0A'
-    set -g message-fg black
-    set -g message-bg '#FEFE0A'
-    set -g message-command-fg black
-    set -g message-command-bg '#FEFE0A'
-    set-option -g mode-keys vi
-    set -g history-limit 5000
-    ## mouse mode
-    set -g mode-mouse on
-    set -g mouse-select-pane on
-    set -g mouse-select-window on
-    set -g mouse-resize-pane on # resize panes with mouse (drag borders)
-    ## status
-    set-option -g status-interval 1
-    set-option -g status-left-length 20
-    set-option -g status-left ''
-    set-option -g status-right '%Y-%m-%dT%H%M%S '
-    ## run programs in panes
-    # split left-right
-    split-window -h
-    select-pane -t 0
-    send-keys 'clear' Enter
-    select-pane -t 1
-    send-keys 'ranger' Enter
-    set -g set-remain-on-exit off
-    """
-
-    configurationDetail = \
-    """
-    set -g set-remain-on-exit on
-    new -s "DETAIL"
-    set-option -g prefix C-a
-    unbind C-b
-    bind - split-window -v
-    bind | split-window -h
-    ## colours
-    set-option -g window-status-current-bg yellow
-    set-option -g pane-active-border-fg yellow
-    set -g status-fg black
-    set -g status-bg '#FEFE0A'
-    set -g message-fg black
-    set -g message-bg '#FEFE0A'
-    set -g message-command-fg black
-    set -g message-command-bg '#FEFE0A'
-    set-option -g mode-keys vi
-    set -g history-limit 5000
-    ## mouse mode
-    set -g mode-mouse on
-    set -g mouse-select-pane on
-    set -g mouse-select-window on
-    set -g mouse-resize-pane on # resize panes with mouse (drag borders)
-    ## status
-    set-option -g status-interval 1
-    set-option -g status-left-length 20
-    set-option -g status-left ''
-    set-option -g status-right '%Y-%m-%dT%H%M%S '
-    ## run programs in panes
-    # split left-right
-    split-window -h
-    # split left up
-    select-pane -t 0
-    split-window -v
-    select-pane -t 0
-    split-window -v
-    select-pane -t 0
-    split-window -v
-    select-pane -t 0
-    send-keys 'ranger' Enter
-    select-pane -t 1
-    send-keys 'clear' Enter
-    select-pane -t 2
-    #send-keys 'htop' Enter
-    select-pane -t 3
-    send-keys 'elinks http://arxiv.org/list/hep-ph/new' Enter
-    select-pane -t 4
-    send-keys 'ranger' Enter
-    set -g set-remain-on-exit off
-    """
-
-    configurationWork = \
-    """
-    set -g set-remain-on-exit on
-    new -s "WORK"
-    set-option -g prefix C-a
-    unbind C-b
-    bind - split-window -v
-    bind | split-window -h
-    ## colours
-    set-option -g window-status-current-bg yellow
-    set-option -g pane-active-border-fg yellow
-    set -g status-fg black
-    set -g status-bg '#FEFE0A'
-    set -g message-fg black
-    set -g message-bg '#FEFE0A'
-    set -g message-command-fg black
-    set -g message-command-bg '#FEFE0A'
-    set-option -g mode-keys vi
-    set -g history-limit 5000
-    ## mouse mode
-    set -g mode-mouse on
-    set -g mouse-select-pane on
-    set -g mouse-select-window on
-    set -g mouse-resize-pane on # resize panes with mouse (drag borders)
-    ## status
-    set-option -g status-interval 1
-    set-option -g status-left-length 20
-    set-option -g status-left ''
-    set-option -g status-right '%Y-%m-%dT%H%M%S '
-    ## run programs in panes
-    split-window -v
-    select-pane -t 1
-    split-window -v
-    select-pane -t 3
-    split-window -h
-    select-pane -t 0
-    send-keys 'ranger' Enter
-    select-pane -t 1
-    send-keys 'clear' Enter
-    select-pane -t 2
-    send-keys 'ranger' Enter
-    select-pane -t 3
-    send-keys 'cmus' Enter
-    set -g set-remain-on-exit off
-    """
-
-    configurationBadass = \
+    configuration_badass = \
     """
     set -g set-remain-on-exit on
     new -s "BADASS"
@@ -490,44 +353,210 @@ def main(options):
     set -g set-remain-on-exit off
     """
 
-    if engageConfigurationAnalysis is True:
-        configurationtmux = configurationAnalysis
-    elif engageConfigurationBadass is True:
-        configurationtmux = configurationBadass
-    elif engageConfigurationDetail is True:
-        configurationtmux = configurationDetail
-    elif engageConfigurationEdit is True:
-        configurationtmux = configurationEdit
-    elif engageConfigurationWork is True:
-        configurationtmux = configurationWork
-    else:
-        configurationtmux = configurationEdit
+    configuration_detail = \
+    """
+    set -g set-remain-on-exit on
+    new -s "DETAIL"
+    set-option -g prefix C-a
+    unbind C-b
+    bind - split-window -v
+    bind | split-window -h
+    ## colours
+    set-option -g window-status-current-bg yellow
+    set-option -g pane-active-border-fg yellow
+    set -g status-fg black
+    set -g status-bg '#FEFE0A'
+    set -g message-fg black
+    set -g message-bg '#FEFE0A'
+    set -g message-command-fg black
+    set -g message-command-bg '#FEFE0A'
+    set-option -g mode-keys vi
+    set -g history-limit 5000
+    ## mouse mode
+    set -g mode-mouse on
+    set -g mouse-select-pane on
+    set -g mouse-select-window on
+    set -g mouse-resize-pane on # resize panes with mouse (drag borders)
+    ## status
+    set-option -g status-interval 1
+    set-option -g status-left-length 20
+    set-option -g status-left ''
+    set-option -g status-right '%Y-%m-%dT%H%M%S '
+    ## run programs in panes
+    # split left-right
+    split-window -h
+    # split left up
+    select-pane -t 0
+    split-window -v
+    select-pane -t 0
+    split-window -v
+    select-pane -t 0
+    split-window -v
+    select-pane -t 0
+    send-keys 'ranger' Enter
+    select-pane -t 1
+    send-keys 'clear' Enter
+    select-pane -t 2
+    #send-keys 'htop' Enter
+    select-pane -t 3
+    send-keys 'elinks http://arxiv.org/list/hep-ph/new' Enter
+    select-pane -t 4
+    send-keys 'ranger' Enter
+    set -g set-remain-on-exit off
+    """
 
-    command = \
-        "configurationtmux=\"$(mktemp)\" && { echo \"" + \
-        configurationtmux + \
-        "\" > \"${configurationtmux}\"; " + \
-        executable + \
-        " -f \"${configurationtmux}\" attach; " + \
-        "unlink \"${configurationtmux}\"; }"
+    configuration_edit = \
+    """
+    set -g set-remain-on-exit on
+    new -s "EDIT"
+    set-option -g prefix C-a
+    unbind C-b
+    bind - split-window -v
+    bind | split-window -h
+    ## colours
+    set-option -g window-status-current-bg yellow
+    set-option -g pane-active-border-fg yellow
+    set -g status-fg black
+    set -g status-bg '#FEFE0A'
+    set -g message-fg black
+    set -g message-bg '#FEFE0A'
+    set -g message-command-fg black
+    set -g message-command-bg '#FEFE0A'
+    set-option -g mode-keys vi
+    set -g history-limit 5000
+    ## mouse mode
+    set -g mode-mouse on
+    set -g mouse-select-pane on
+    set -g mouse-select-window on
+    set -g mouse-resize-pane on # resize panes with mouse (drag borders)
+    ## status
+    set-option -g status-interval 1
+    set-option -g status-left-length 20
+    set-option -g status-left ''
+    set-option -g status-right '%Y-%m-%dT%H%M%S '
+    ## run programs in panes
+    # split left-right
+    split-window -h
+    select-pane -t 0
+    send-keys 'clear' Enter
+    select-pane -t 1
+    send-keys 'ranger' Enter
+    set -g set-remain-on-exit off
+    """
+
+    configuration_work = \
+    """
+    set -g set-remain-on-exit on
+    new -s "WORK"
+    set-option -g prefix C-a
+    unbind C-b
+    bind - split-window -v
+    bind | split-window -h
+    ## colours
+    set-option -g window-status-current-bg yellow
+    set-option -g pane-active-border-fg yellow
+    set -g status-fg black
+    set -g status-bg '#FEFE0A'
+    set -g message-fg black
+    set -g message-bg '#FEFE0A'
+    set -g message-command-fg black
+    set -g message-command-bg '#FEFE0A'
+    set-option -g mode-keys vi
+    set -g history-limit 5000
+    ## mouse mode
+    set -g mode-mouse on
+    set -g mouse-select-pane on
+    set -g mouse-select-window on
+    set -g mouse-resize-pane on # resize panes with mouse (drag borders)
+    ## status
+    set-option -g status-interval 1
+    set-option -g status-left-length 20
+    set-option -g status-left ''
+    set-option -g status-right '%Y-%m-%dT%H%M%S '
+    ## run programs in panes
+    split-window -v
+    select-pane -t 1
+    split-window -v
+    select-pane -t 3
+    split-window -h
+    select-pane -t 0
+    send-keys 'ranger' Enter
+    select-pane -t 1
+    send-keys 'clear' Enter
+    select-pane -t 2
+    send-keys 'ranger' Enter
+    select-pane -t 3
+    send-keys 'cmus' Enter
+    set -g set-remain-on-exit off
+    """
+
+    if engage_configuration_analysis is True:
+        configuration_tmux = configuration_analysis
+    elif engage_configuration_badass is True:
+        configuration_tmux = configuration_badass
+    elif engage_configuration_detail is True:
+        configuration_tmux = configuration_detail
+    elif engage_configuration_edit is True:
+        configuration_tmux = configuration_edit
+    elif engage_configuration_work is True:
+        configuration_tmux = configuration_work
+    else:
+        configuration_tmux = configuration_edit
+
+    command                                             = \
+        "configuration_tmux=\"$(mktemp)\" && { echo \"" + \
+        configuration_tmux                              + \
+        "\" > \"${configuration_tmux}\"; "              + \
+        executable                                      + \
+        " -f \"${configuration_tmux}\" attach; "        + \
+        "unlink \"${configuration_tmux}\"; }"
     os.system(command)
 
     sys.exit()
 
 def ensure_prerequisites(prerequisites):
+    successes = {}
     for prerequisite in prerequisites:
         if which(prerequisite) is None:
-            instate(prerequisite)
+            success = instate(prerequisite)
+            successes[prerequisite] = success
+    if False in successes.values():
+        print("error: dependencies not met -- continue? (y/n)\n")
+        print(successes)
+        y_or_n = propyte.get_y_or_n()
+        if y_or_n == "n":
+            sys.exit()
 
 def instate(program):
     print("instate {program}".format(program = program))
     if program == "hollywood":
-        os.system("sudo apt-add-repository -y ppa:hollywood/ppa")
-        os.system("sudo apt-get -y update")
-        os.system("sudo apt-get -y install byobu hollywood")
+        if which("apt-get") is None:
+            print(
+                "error: \"apt-get\" not detected -- "
+                "install program \"{program}\" manually".format(
+                    program = program
+                )
+            )
+            success = False
+        else:
+            os.system("sudo apt-add-repository -y ppa:hollywood/ppa")
+            os.system("sudo apt-get -y update")
+            os.system("sudo apt-get -y install byobu hollywood")
+            success = True
     else:
-        command = "sudo apt-get -y install " + program
-        os.system(command)
+        if which("apt-get") is None:
+            print(
+                "error: \"apt-get\" not detected -- "
+                "install program \"{program}\" manually".format(
+                    program = program
+                )
+            )
+            success = False
+        else:
+            command = "sudo apt-get -y install " + program
+            os.system(command)
+            success = True
+    return success
 
 def which(program):
     def is_exe(fpath):
