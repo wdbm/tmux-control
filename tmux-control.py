@@ -88,6 +88,8 @@ which communicate through a socket in /tmp.
 |Ctrl a &               |Kill the current window.                              |
 |------------------------------------------------------------------------------|
 |Ctrl a c               |Create a new window.                                  |
+|Ctrl a ,               |Name a window.                                        |
+|Ctrl a w               |Display a list of all windows.                        |
 |Ctrl a l               |Change to the previous window.                        |
 |Ctrl a n               |Change to the next window.                            |
 |Ctrl a Alt n           |Change to the next window with a bell or activity     |
@@ -223,7 +225,7 @@ Options:
 """
 
 name    = "tmux-control"
-version = "2016-08-01T1616Z"
+version = "2016-08-01T1646Z"
 
 import docopt
 import os
