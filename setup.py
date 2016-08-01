@@ -9,7 +9,7 @@ def main():
 
     setuptools.setup(
         name             = "tmux-control",
-        version          = "2016-08-01T1614Z",
+        version          = "2016-08-01T1615Z",
         description      = "configure and control tmux",
         long_description = pypandoc.convert("README.md", "rst"),
         url              = "https://github.com/wdbm/tmux-control",
@@ -21,8 +21,7 @@ def main():
                            ],
         scripts          = [
                            "tmux-control.py"
-                           ],
-        """
+                           ]
     )
 
 def read(*paths):
