@@ -2,6 +2,10 @@
 
 configure and control tmux
 
+# note
+
+code in experimental state -- check back soon
+
 # setup
 
 ```Bash
