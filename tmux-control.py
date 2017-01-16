@@ -225,7 +225,7 @@ Options:
 """
 
 name    = "tmux-control"
-version = "2016-08-02T1656Z"
+version = "2017-01-16T1614Z"
 
 import docopt
 import os
