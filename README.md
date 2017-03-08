@@ -2,17 +2,19 @@
 
 configure and control tmux
 
-# note
-
-code in experimental state -- check back soon
-
 # setup
 
 ```Bash
+sudo apt-get install cmus
+sudo apt-get install elinks
+sudo apt-get install htop
+sudo apt-get install ranger
+sudo apt-get install tmux
+
 sudo pip install tmuxcontrol
 ```
 
-# documentation and help
+# usage
 
 ```Bash
 tmux-control.py --help

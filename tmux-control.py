@@ -149,13 +149,13 @@ analysis mode:
 detail mode:
 -----------------------
 |          |          |
-|  ranger  |          |
+| ranger   |          |
 |----------|          |
 | terminal |          |
 |----------|  ranger  |
-|   top    |          |
+| htop     |          |
 |----------|          |
-|  arXiv   |          |
+| arXiv    |          |
 |          |          |
 -----------------------
 
@@ -178,11 +178,24 @@ badass mode (does not work via SSH):
 |----------|          |
 | terminal |          |
 |----------|          |
-| top      |  ranger  |
+| htop     |  ranger  |
 |----------|          |
 | arXiv    |          |
 |----------|          |
 | cmus     |          |
+-----------------------
+
+Nvidia mode:
+-----------------------
+|                     |
+|        htop         |
+|                     |
+|                     |
+|---------------------|
+|                     |
+|     nvidia-smi      |
+|                     |
+|                     |
 -----------------------
 
 # cmus
@@ -211,21 +224,22 @@ badass mode (does not work via SSH):
 |q         |quit                              |
 -----------------------------------------------
 
-Usage:
+usage:
     program [options]
 
-Options:
+options:
     -h, --help  display help message
     --version   display version and exit
     --analysis  analysis configuration
     --badass    badass configuration
     --detail    detail configuration
     --edit      edit configuration
+    --nvidia    Nvidia configuration
     --work      work configuration
 """
 
 name    = "tmux-control"
-version = "2017-01-16T1614Z"
+version = "2017-03-08T1536Z"
 
 import docopt
 import os
@@ -239,6 +253,7 @@ def main(options):
     engage_configuration_badass   = options["--badass"]
     engage_configuration_detail   = options["--detail"]
     engage_configuration_edit     = options["--edit"]
+    engage_configuration_Nvidia   = options["--nvidia"]
     engage_configuration_work     = options["--work"]
 
     prerequisites = [
@@ -278,10 +293,7 @@ def main(options):
     set-option -g mode-keys vi
     set -g history-limit 5000
     ## mouse mode
-    set -g mode-mouse on
-    set -g mouse-select-pane on
-    set -g mouse-select-window on
-    set -g mouse-resize-pane on # resize panes with mouse (drag borders)
+    set -g mouse on
     ## status
     set-option -g status-interval 1
     set-option -g status-left-length 20
@@ -318,10 +330,7 @@ def main(options):
     set-option -g mode-keys vi
     set -g history-limit 5000
     ## mouse mode
-    set -g mode-mouse on
-    set -g mouse-select-pane on
-    set -g mouse-select-window on
-    set -g mouse-resize-pane on # resize panes with mouse (drag borders)
+    set -g mouse on
     ## status
     set-option -g status-interval 1
     set-option -g status-left-length 20
@@ -344,7 +353,7 @@ def main(options):
     select-pane -t 1
     send-keys 'clear' Enter
     select-pane -t 2
-    #send-keys 'htop' Enter
+    send-keys 'htop' Enter
     select-pane -t 3
     send-keys 'elinks http://arxiv.org/list/hep-ph/new' Enter
     select-pane -t 4
@@ -375,10 +384,7 @@ def main(options):
     set-option -g mode-keys vi
     set -g history-limit 5000
     ## mouse mode
-    set -g mode-mouse on
-    set -g mouse-select-pane on
-    set -g mouse-select-window on
-    set -g mouse-resize-pane on # resize panes with mouse (drag borders)
+    set -g mouse on
     ## status
     set-option -g status-interval 1
     set-option -g status-left-length 20
@@ -399,7 +405,7 @@ def main(options):
     select-pane -t 1
     send-keys 'clear' Enter
     select-pane -t 2
-    #send-keys 'htop' Enter
+    send-keys 'htop' Enter
     select-pane -t 3
     send-keys 'elinks http://arxiv.org/list/hep-ph/new' Enter
     select-pane -t 4
@@ -427,10 +433,7 @@ def main(options):
     set-option -g mode-keys vi
     set -g history-limit 5000
     ## mouse mode
-    set -g mode-mouse on
-    set -g mouse-select-pane on
-    set -g mouse-select-window on
-    set -g mouse-resize-pane on # resize panes with mouse (drag borders)
+    set -g mouse on
     ## status
     set-option -g status-interval 1
     set-option -g status-left-length 20
@@ -443,6 +446,43 @@ def main(options):
     send-keys 'clear' Enter
     select-pane -t 1
     send-keys 'ranger' Enter
+    set -g set-remain-on-exit off
+    """
+
+    configuration_Nvidia = \
+    """
+    set -g set-remain-on-exit on
+    new -s "NVIDIA"
+    set-option -g prefix C-a
+    unbind C-b
+    bind - split-window -v
+    bind | split-window -h
+    ## colours
+    set-option -g window-status-current-bg yellow
+    set-option -g pane-active-border-fg yellow
+    set -g status-fg black
+    set -g status-bg '#FEFE0A'
+    set -g message-fg black
+    set -g message-bg '#FEFE0A'
+    set -g message-command-fg black
+    set -g message-command-bg '#FEFE0A'
+    set-option -g mode-keys vi
+    set -g history-limit 5000
+    ## mouse mode
+    set -g mouse on
+    ## status
+    set-option -g status-interval 1
+    set-option -g status-left-length 20
+    set-option -g status-left ''
+    set-option -g status-right '%Y-%m-%dT%H%M%S '
+    ## run programs in panes
+    # split up-down
+    split-window -v
+    # split left up
+    select-pane -t 0
+    send-keys 'htop' Enter
+    select-pane -t 1
+    send-keys 'watch -n 0.5 nvidia-smi' Enter
     set -g set-remain-on-exit off
     """
 
@@ -466,10 +506,7 @@ def main(options):
     set-option -g mode-keys vi
     set -g history-limit 5000
     ## mouse mode
-    set -g mode-mouse on
-    set -g mouse-select-pane on
-    set -g mouse-select-window on
-    set -g mouse-resize-pane on # resize panes with mouse (drag borders)
+    set -g mouse on
     ## status
     set-option -g status-interval 1
     set-option -g status-left-length 20
@@ -492,17 +529,26 @@ def main(options):
     set -g set-remain-on-exit off
     """
 
-    if engage_configuration_analysis is True:
+    if engage_configuration_analysis:
+        #print("engage configuration analysis")
         configuration_tmux = configuration_analysis
-    elif engage_configuration_badass is True:
+    elif engage_configuration_badass:
+        #print("engage configuration badass")
         configuration_tmux = configuration_badass
-    elif engage_configuration_detail is True:
+    elif engage_configuration_detail:
+        #print("engage configuration detail")
         configuration_tmux = configuration_detail
-    elif engage_configuration_edit is True:
+    elif engage_configuration_edit:
+        #print("engage configuration edit")
         configuration_tmux = configuration_edit
-    elif engage_configuration_work is True:
+    elif engage_configuration_Nvidia:
+        #print("engage configuration Nvidia")
+        configuration_tmux = configuration_Nvidia
+    elif engage_configuration_work:
+        #print("engage configuration work")
         configuration_tmux = configuration_work
     else:
+        #print("engage configuration edit (default)")
         configuration_tmux = configuration_edit
 
     command                                             = \
