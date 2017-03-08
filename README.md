@@ -11,7 +11,7 @@ sudo apt-get install htop
 sudo apt-get install ranger
 sudo apt-get install tmux
 
-sudo pip install tmuxcontrol
+sudo pip install tmux_control
 ```
 
 # usage
