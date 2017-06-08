@@ -266,7 +266,7 @@ import propyte
 import shijian
 
 name    = "tmux-control"
-version = "2017-06-08T2147Z"
+version = "2017-06-08T2149Z"
 
 def main(options):
 
