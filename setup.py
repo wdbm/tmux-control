@@ -10,7 +10,7 @@ def main():
 
     setuptools.setup(
         name             = "tmux-control",
-        version          = "2017.06.08.2138",
+        version          = "2017.06.08.2137",
         description      = "configure and control tmux",
         long_description = long_description(),
         url              = "https://github.com/wdbm/tmux-control",

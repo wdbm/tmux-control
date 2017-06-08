@@ -86,6 +86,8 @@ which communicate through a socket in /tmp.
 |                       |exit).                                                |
 |Ctrl a d               |Detach the current client.                            |
 |Ctrl a &               |Kill the current window.                              |
+|Ctrl a k               |Kill the current session.                             |
+|Ctrl a K               |Kill the current server.                              |
 |------------------------------------------------------------------------------|
 |Ctrl a c               |Create a new window.                                  |
 |Ctrl a ,               |Name a window.                                        |
@@ -96,7 +98,7 @@ which communicate through a socket in /tmp.
 |                       |marker.                                               |
 |Ctrl a Alt p           |Change to the previous window with a bell or activity |
 |                       |marker.                                               |
-|Ctrl a Ctrl o          |rotate the panes of the current window forwards.      |
+|Ctrl a Ctrl o          |Rotate the panes of the current window forwards.      |
 |Ctrl a Alt o           |Rotate the panes of the current window backwards.     |
 |Ctrl a Alt <1 -- 5>    |Arrange panes in one of five preset layouts: even     |
 |                       |horizontal, even vertical, main horizontal, main      |
@@ -115,7 +117,7 @@ which communicate through a socket in /tmp.
 |Ctrl a ~               |Show previous messages from tmux, if they exist (press|
 |                       |q to exit).                                           |
 |Ctrl a r               |Force a redraw of the attached client.                |
-|Ctrl a z               |suspend the tmux client.                              |
+|Ctrl a z               |Suspend the tmux client.                              |
 --------------------------------------------------------------------------------
 
 # launch modes
@@ -264,7 +266,7 @@ import propyte
 import shijian
 
 name    = "tmux-control"
-version = "2017-06-08T2138Z"
+version = "2017-06-08T2147Z"
 
 def main(options):
 
