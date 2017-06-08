@@ -120,19 +120,6 @@ which communicate through a socket in /tmp.
 
 # launch modes
 
-edit mode (default):
------------------------
-|          |          |
-|          |          |
-|          |          |
-|          |          |
-| terminal |  ranger  |
-|          |          |
-|          |          |
-|          |          |
-|          |          |
------------------------
-
 analysis mode:
 -----------------------
 |                     |
@@ -144,32 +131,6 @@ analysis mode:
 |      terminal       |
 |                     |
 |                     |
------------------------
-
-detail mode:
------------------------
-|          |          |
-| ranger   |          |
-|----------|          |
-| terminal |          |
-|----------|  ranger  |
-| htop     |          |
-|----------|          |
-| arXiv    |          |
-|          |          |
------------------------
-
-work mode:
------------------------
-|                     |
-|       ranger        |
-|---------------------|
-|                     |
-|      terminal       |
-|---------------------|
-|          |          |
-|  ranger  |  cmus    |
-|          |          |
 -----------------------
 
 badass mode (does not work via SSH):
@@ -185,6 +146,32 @@ badass mode (does not work via SSH):
 | cmus     |          |
 -----------------------
 
+detail mode:
+-----------------------
+|          |          |
+| ranger   |          |
+|----------|          |
+| terminal |          |
+|----------|  ranger  |
+| htop     |          |
+|----------|          |
+| arXiv    |          |
+|          |          |
+-----------------------
+
+edit mode (default):
+-----------------------
+|          |          |
+|          |          |
+|          |          |
+|          |          |
+| terminal |  ranger  |
+|          |          |
+|          |          |
+|          |          |
+|          |          |
+-----------------------
+
 Nvidia mode:
 -----------------------
 |                     |
@@ -196,6 +183,32 @@ Nvidia mode:
 |     nvidia-smi      |
 |                     |
 |                     |
+-----------------------
+
+run mode:
+-----------------------
+|                     |
+|                     |
+|                     |
+|                     |
+|      scripts        |
+|                     |
+|                     |
+|                     |
+|                     |
+-----------------------
+
+work mode:
+-----------------------
+|                     |
+|       ranger        |
+|---------------------|
+|                     |
+|      terminal       |
+|---------------------|
+|          |          |
+|  ranger  |  cmus    |
+|          |          |
 -----------------------
 
 # cmus
@@ -230,22 +243,28 @@ usage:
 options:
     -h, --help  display help message
     --version   display version and exit
+
     --analysis  analysis configuration
     --badass    badass configuration
     --detail    detail configuration
     --edit      edit configuration
     --nvidia    Nvidia configuration
+    --run       run configuration
     --work      work configuration
-"""
 
-name    = "tmux-control"
-version = "2017-03-08T1536Z"
+    --directory=NAME  directory of scripts to run             [default: scripts]
+    --extension=EXT   scripts extension (set to none for any) [default: sh]
+"""
 
 import docopt
 import os
 import sys
 
 import propyte
+import shijian
+
+name    = "tmux-control"
+version = "2017-06-08T2138Z"
 
 def main(options):
 
@@ -254,7 +273,13 @@ def main(options):
     engage_configuration_detail   = options["--detail"]
     engage_configuration_edit     = options["--edit"]
     engage_configuration_Nvidia   = options["--nvidia"]
+    engage_configuration_run      = options["--run"]
     engage_configuration_work     = options["--work"]
+
+    directoryname                 = options["--directory"]
+    extension_required            = options["--extension"]
+    if extension_required.lower() == "none":
+        extension_required = None
 
     prerequisites = [
         "cmus",
@@ -281,6 +306,8 @@ def main(options):
     unbind C-b
     bind - split-window -v
     bind | split-window -h
+    bind k kill-session
+    bind K kill-server
     ## colours
     set-option -g window-status-current-bg yellow
     set-option -g pane-active-border-fg yellow
@@ -291,7 +318,7 @@ def main(options):
     set -g message-command-fg black
     set -g message-command-bg '#FEFE0A'
     set-option -g mode-keys vi
-    set -g history-limit 5000
+    set -g history-limit 20000
     ## mouse mode
     set -g mouse on
     ## status
@@ -318,6 +345,8 @@ def main(options):
     unbind C-b
     bind - split-window -v
     bind | split-window -h
+    bind k kill-session
+    bind K kill-server
     ## colours
     set-option -g window-status-current-bg yellow
     set-option -g pane-active-border-fg yellow
@@ -328,7 +357,7 @@ def main(options):
     set -g message-command-fg black
     set -g message-command-bg '#FEFE0A'
     set-option -g mode-keys vi
-    set -g history-limit 5000
+    set -g history-limit 20000
     ## mouse mode
     set -g mouse on
     ## status
@@ -372,6 +401,8 @@ def main(options):
     unbind C-b
     bind - split-window -v
     bind | split-window -h
+    bind k kill-session
+    bind K kill-server
     ## colours
     set-option -g window-status-current-bg yellow
     set-option -g pane-active-border-fg yellow
@@ -382,7 +413,7 @@ def main(options):
     set -g message-command-fg black
     set -g message-command-bg '#FEFE0A'
     set-option -g mode-keys vi
-    set -g history-limit 5000
+    set -g history-limit 20000
     ## mouse mode
     set -g mouse on
     ## status
@@ -421,6 +452,8 @@ def main(options):
     unbind C-b
     bind - split-window -v
     bind | split-window -h
+    bind k kill-session
+    bind K kill-server
     ## colours
     set-option -g window-status-current-bg yellow
     set-option -g pane-active-border-fg yellow
@@ -431,7 +464,7 @@ def main(options):
     set -g message-command-fg black
     set -g message-command-bg '#FEFE0A'
     set-option -g mode-keys vi
-    set -g history-limit 5000
+    set -g history-limit 20000
     ## mouse mode
     set -g mouse on
     ## status
@@ -457,6 +490,8 @@ def main(options):
     unbind C-b
     bind - split-window -v
     bind | split-window -h
+    bind k kill-session
+    bind K kill-server
     ## colours
     set-option -g window-status-current-bg yellow
     set-option -g pane-active-border-fg yellow
@@ -467,7 +502,7 @@ def main(options):
     set -g message-command-fg black
     set -g message-command-bg '#FEFE0A'
     set-option -g mode-keys vi
-    set -g history-limit 5000
+    set -g history-limit 20000
     ## mouse mode
     set -g mouse on
     ## status
@@ -486,14 +521,16 @@ def main(options):
     set -g set-remain-on-exit off
     """
 
-    configuration_work = \
+    configuration_run = \
     """
     set -g set-remain-on-exit on
-    new -s "WORK"
+    new -s "RUN"
     set-option -g prefix C-a
     unbind C-b
     bind - split-window -v
     bind | split-window -h
+    bind k kill-session
+    bind K kill-server
     ## colours
     set-option -g window-status-current-bg yellow
     set-option -g pane-active-border-fg yellow
@@ -504,7 +541,39 @@ def main(options):
     set -g message-command-fg black
     set -g message-command-bg '#FEFE0A'
     set-option -g mode-keys vi
-    set -g history-limit 5000
+    set -g history-limit 20000
+    ## mouse mode
+    set -g mouse on
+    ## status
+    set-option -g status-interval 1
+    set-option -g status-left-length 20
+    set-option -g status-left ''
+    set-option -g status-right '%Y-%m-%dT%H%M%S '
+    set -g set-remain-on-exit off
+    ## run scripts in windows
+    """
+
+    configuration_work = \
+    """
+    set -g set-remain-on-exit on
+    new -s "WORK"
+    set-option -g prefix C-a
+    unbind C-b
+    bind - split-window -v
+    bind | split-window -h
+    bind k kill-session
+    bind K kill-server
+    ## colours
+    set-option -g window-status-current-bg yellow
+    set-option -g pane-active-border-fg yellow
+    set -g status-fg black
+    set -g status-bg '#FEFE0A'
+    set -g message-fg black
+    set -g message-bg '#FEFE0A'
+    set -g message-command-fg black
+    set -g message-command-bg '#FEFE0A'
+    set-option -g mode-keys vi
+    set -g history-limit 20000
     ## mouse mode
     set -g mouse on
     ## status
@@ -529,24 +598,56 @@ def main(options):
     set -g set-remain-on-exit off
     """
 
+    if engage_configuration_run:
+
+        filepaths = shijian.natural_sort(shijian.filepaths_at_directory(
+            directory          = directoryname,
+            extension_required = extension_required
+        ))
+        for index, filepath in enumerate(filepaths):
+            configuration_run += "    new-window\n"
+            configuration_run += "    rename-window -t {index} '{name}'\n".format(
+                index = index + 1,
+                name  = os.path.split(filepath)[1]
+            )
+            configuration_run += "    select-window -t {index}\n".format(
+                index = index + 1
+            )
+            configuration_run += "    send-keys '{filepath}' Enter\n".format(
+                filepath = filepath
+            )
+        #configuration_run += "    choose-window\n"
+        configuration_run += "    select-window -t 0\n"
+
     if engage_configuration_analysis:
+
         #print("engage configuration analysis")
         configuration_tmux = configuration_analysis
+
     elif engage_configuration_badass:
         #print("engage configuration badass")
         configuration_tmux = configuration_badass
+
     elif engage_configuration_detail:
         #print("engage configuration detail")
         configuration_tmux = configuration_detail
+
     elif engage_configuration_edit:
         #print("engage configuration edit")
         configuration_tmux = configuration_edit
+
     elif engage_configuration_Nvidia:
         #print("engage configuration Nvidia")
         configuration_tmux = configuration_Nvidia
+
+    elif engage_configuration_run:
+        #print("engage configuration run")
+        configuration_tmux = configuration_run
+
     elif engage_configuration_work:
         #print("engage configuration work")
         configuration_tmux = configuration_work
+
     else:
         #print("engage configuration edit (default)")
         configuration_tmux = configuration_edit
@@ -558,11 +659,13 @@ def main(options):
         executable                                      + \
         " -f \"${configuration_tmux}\" attach; "        + \
         "unlink \"${configuration_tmux}\"; }"
+
     os.system(command)
 
     sys.exit()
 
 def ensure_prerequisites(prerequisites):
+
     successes = {}
     for prerequisite in prerequisites:
         if which(prerequisite) is None:
@@ -576,6 +679,7 @@ def ensure_prerequisites(prerequisites):
             sys.exit()
 
 def instate(program):
+
     print("instate {program}".format(program = program))
     if program == "hollywood":
         if which("apt-get") is None:
@@ -604,9 +708,11 @@ def instate(program):
             command = "sudo apt-get -y install " + program
             os.system(command)
             success = True
+
     return success
 
 def which(program):
+
     def is_exe(fpath):
         return(os.path.isfile(fpath) and os.access(fpath, os.X_OK))
     fpath, fname = os.path.split(program)
