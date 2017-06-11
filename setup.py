@@ -10,7 +10,7 @@ def main():
 
     setuptools.setup(
         name             = "tmux-control",
-        version          = "2017.06.08.2149",
+        version          = "2017.06.11.1539",
         description      = "configure and control tmux",
         long_description = long_description(),
         url              = "https://github.com/wdbm/tmux-control",
@@ -18,8 +18,7 @@ def main():
         author_email     = "wbm@protonmail.ch",
         license          = "GPLv3",
         install_requires = [
-                           "propyte",
-                           "shijian"
+                           "docopt"
                            ],
         scripts          = [
                            "tmux-control.py"

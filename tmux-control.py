@@ -260,13 +260,11 @@ options:
 
 import docopt
 import os
+import re
 import sys
 
-import propyte
-import shijian
-
 name    = "tmux-control"
-version = "2017-06-08T2149Z"
+version = "2017-06-11T1539Z"
 
 def main(options):
 
@@ -602,7 +600,7 @@ def main(options):
 
     if engage_configuration_run:
 
-        filepaths = shijian.natural_sort(shijian.filepaths_at_directory(
+        filepaths = natural_sort(filepaths_at_directory(
             directory          = directoryname,
             extension_required = extension_required
         ))
@@ -666,6 +664,26 @@ def main(options):
 
     sys.exit()
 
+def get_keystroke():
+
+    import tty
+    import termios
+    fd = sys.stdin.fileno()
+    old_settings = termios.tcgetattr(fd)
+    try:
+        tty.setraw(sys.stdin.fileno())
+        character = sys.stdin.read(1)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+    return character
+
+def get_y_or_n():
+
+    character = None
+    while character != "y" and character != "n":
+        character = get_keystroke().lower()
+    return character
+
 def ensure_prerequisites(prerequisites):
 
     successes = {}
@@ -676,7 +694,7 @@ def ensure_prerequisites(prerequisites):
     if False in successes.values():
         print("error: dependencies not met -- continue? (y/n)\n")
         print(successes)
-        y_or_n = propyte.get_y_or_n()
+        y_or_n = get_y_or_n()
         if y_or_n == "n":
             sys.exit()
 
@@ -712,6 +730,35 @@ def instate(program):
             success = True
 
     return success
+
+def natural_sort(
+    list_object
+    ):
+
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanumeric_key = lambda key: [
+        convert(text) for text in re.split("([0-9]+)", key)
+    ]
+
+    return sorted(list_object, key = alphanumeric_key)
+
+def filepaths_at_directory(
+    directory          = None,
+    extension_required = None
+    ):
+
+    if not os.path.isdir(directory):
+        print("error -- directory {directory} not found".format(directory = directory))
+        raise(IOError)
+    filepaths = [
+        os.path.abspath(os.path.join(directory, filename))\
+        for filename in os.listdir(directory)\
+        if os.path.isfile(os.path.join(directory, filename))
+    ]
+    if extension_required:
+        filepaths = [filepath for filepath in filepaths if extension_required in os.path.splitext(filepath)[1]]
+
+    return filepaths
 
 def which(program):
 
