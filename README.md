@@ -2,21 +2,23 @@
 
 configure and control tmux
 
-# setup
+## setup
 
 ```Bash
-sudo apt-get install cmus
-sudo apt-get install elinks
-sudo apt-get install htop
-sudo apt-get install ranger
-sudo apt-get install tmux
+sudo apt-get install \
+    cmus             \
+    elinks           \
+    htop             \
+    nvtop            \
+    ranger           \
+    tmux
 
 sudo pip install tmux_control
 ```
 
-# configurations
+## configurations
 
-## analysis mode
+### analysis mode
 
 This mode is designed to be ergonomic for running an analysis. The bottom terminal runs the main analysis code while ranger allows for quick viewing of ongoing analysis output files.
 
@@ -34,9 +36,7 @@ This mode is designed to be ergonomic for running an analysis. The bottom termin
 -----------------------
 ```
 
-## badass mode
-
-This mode is designed to be useful but also to show off the size of one's metaphorical terminal configuration cock. It opens arXiv so you can be a physics stunna, and cmus for acid dinner jazz.
+### badass mode
 
 ```
 -----------------------
@@ -52,7 +52,7 @@ This mode is designed to be useful but also to show off the size of one's metaph
 -----------------------
 ```
 
-## detail mode
+### detail mode
 
 This mode is designed to be a less fun version of badass mode.
 
@@ -70,7 +70,7 @@ This mode is designed to be a less fun version of badass mode.
 -----------------------
 ```
 
-## edit mode (default)
+### edit mode (default)
 
 This mode is designed to be ergonomic for coding.
 
@@ -88,9 +88,9 @@ This mode is designed to be ergonomic for coding.
 -----------------------
 ```
 
-## Nvidia mode
+### Nvidia mode
 
-This mode is designed to display system resource usage for a system featuring Nvidia  hardware.
+This mode is designed to display system resource usage for a system featuring Nvidia hardware.
 
 ```
 -----------------------
@@ -100,15 +100,21 @@ This mode is designed to display system resource usage for a system featuring Nv
 |                     |
 |---------------------|
 |                     |
-|     nvidia-smi      |
+|        nvtop        |
 |                     |
 |                     |
 -----------------------
 ```
 
-## run mode
+### run mode
 
-This mode launches all of the scripts at a specified directory in separate windows.
+This special mode launches all of the scripts at a defined directory in separate windows. It is used by engaging the option `--run`, optionally together with the `--directory` option used to set the directory with a full or relative path (by default, the directory "scripts" at the working directory) and the `--extension` option used to define the extension of the scripts (by default, "sh", and which can be set to "none" for any extensions).
+
+For example, the following command should run all files, regardless of extensions, at the directory `/home/user/run_scripts`:
+
+```Bash
+tmux-control.py --run --directory=/home/user/run_scripts --extension=none
+```
 
 ```
 -----------------------
@@ -124,7 +130,7 @@ This mode launches all of the scripts at a specified directory in separate windo
 -----------------------
 ```
 
-## work mode
+### work mode
 
 This mode is designed to be a compromise between analysis, edit and badass modes.
 
@@ -142,8 +148,3 @@ This mode is designed to be a compromise between analysis, edit and badass modes
 -----------------------
 ```
 
-# usage
-
-```Bash
-tmux-control.py --help
-```

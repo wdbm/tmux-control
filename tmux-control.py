@@ -28,97 +28,9 @@
 # more details.                                                                #
 #                                                                              #
 # For a copy of the GNU General Public License, see                            #
-# <http://www.gnu.org/licenses/>.                                              #
+# <http://www.gnu.org/licenses>.                                               #
 #                                                                              #
 ################################################################################
-
-# tmux customised configuration and launcher
-
-# introduction
-
-tmux is a terminal multiplexer. It enables a number of terminals to be created,
-accessed and controlled from a single screen. tmux can be detached from and
-continue running in the background, then reattached. tmux is essentially a tiled
-window manager for the terminal.
-
-When launched, tmux creates a new session with a single window and displays it.
-A status line at the bottom of the display details information on the current
-session and is used to enter interactive commands. The status line displays the
-session number, the window number and other information. An active pane has a
-bright green border while inactive panes have white borders.
-
-A session is a single collection of pseudoterminals under the management of
-tmux. Each session has one or more windows linked to it. A window occupies the
-entire screen and may be split into rectangular panes, each of which is a
-pseudoterminal. Any number of tmux instances may connect to the same session and
-any number of the windows may be present in the same session. Once all sessions
-are killed, tmux exits.
-
-Each session is persistent and can survive accidental disconnection (e.g. via
-SSH timeout) or intentional detaching (Ctrl a d). tmux can be reattached using
-the command tmux attach.
-
-In tmux, a session is displayed on screen by a client and all sessions are
-managed by a single server. The server and each client are separate processes
-which communicate through a socket in /tmp.
-
-# keybindings
-
---------------------------------------------------------------------------------
-|keybinding             |description                                           |
-|-----------------------|------------------------------------------------------|
-|Ctrl a ?               |List all keybindings (press q to exit).               |
-|Ctrl a -               |Split window horizontally.                            |
-|Ctrl a |               |Split window vertically.                              |
-|Ctrl a x               |Kill the current pane.                                |
-|Ctrl a o               |Change to the next pane in the current window.        |
-|Ctrl a p               |Change to previous pane in the current window.        |
-|Ctrl a <direction>     |Change to a pane adjacent to the current pane.        |
-|Ctrl a Ctrl <direction>|Resize the current pane in steps of one cell.         |
-|Ctrl a Alt <direction> |Resize the current pane in steps of five cells.       |
-|Ctrl a f               |Prompt to search for text in open windows.            |
-|Ctrl a [               |Enter copy mode to copy text or view the history.     |
-|Ctrl a ]               |Paste the most recently copied buffer of text.        |
-|Ctrl a =               |Choose which buffer to paste interactively from a     |
-|                       |list.                                                 |
-|Ctrl a :               |Enter the tmux command prompt.                        |
-|Ctrl a t               |Display the time in the current pane (press q to      |
-|                       |exit).                                                |
-|Ctrl a d               |Detach the current client.                            |
-|Ctrl a &               |Kill the current window.                              |
-|Ctrl a k               |Kill the current session.                             |
-|Ctrl a K               |Kill the current server.                              |
-|------------------------------------------------------------------------------|
-|Ctrl a c               |Create a new window.                                  |
-|Ctrl a ,               |Name a window.                                        |
-|Ctrl a w               |Display a list of all windows.                        |
-|Ctrl a l               |Change to the previous window.                        |
-|Ctrl a n               |Change to the next window.                            |
-|Ctrl a Alt n           |Change to the next window with a bell or activity     |
-|                       |marker.                                               |
-|Ctrl a Alt p           |Change to the previous window with a bell or activity |
-|                       |marker.                                               |
-|Ctrl a Ctrl o          |Rotate the panes of the current window forwards.      |
-|Ctrl a Alt o           |Rotate the panes of the current window backwards.     |
-|Ctrl a Alt <1 -- 5>    |Arrange panes in one of five preset layouts: even     |
-|                       |horizontal, even vertical, main horizontal, main      |
-|                       |vertical or tiled.                                    |
-|Ctrl a {               |Swap the current pane with the previous pane.         |
-|Ctrl a }               |Swap the current pane with the next pane.             |
-|Ctrl a !               |Break the current pane out of the window.             |
-|Ctrl a %               |Split the current pane into two, left and right.      |
-|Ctrl a "               |Split the current pane into two, top and bottom.      |
-|Ctrl a ;               |Change to the previously-active pane.                 |
-|Ctrl a $               |Rename the current session.                           |
-|Ctrl a ,               |Rename the current window.                            |
-|Ctrl a <0 -- 9>        |Select window 0 to 9.                                 |
-|Ctrl a q               |Display pane indexes briefly.                         |
-|Ctrl a i               |Display information about the current window.         |
-|Ctrl a ~               |Show previous messages from tmux, if they exist (press|
-|                       |q to exit).                                           |
-|Ctrl a r               |Force a redraw of the attached client.                |
-|Ctrl a z               |Suspend the tmux client.                              |
---------------------------------------------------------------------------------
 
 # launch modes
 
@@ -182,7 +94,7 @@ Nvidia mode:
 |                     |
 |---------------------|
 |                     |
-|     nvidia-smi      |
+|        nvtop        |
 |                     |
 |                     |
 -----------------------
@@ -213,32 +125,6 @@ work mode:
 |          |          |
 -----------------------
 
-# cmus
-
------------------------------------------------
-|command   |action                            |
-|----------|----------------------------------|
-|:a ~/music|load music from directory         |
-|x         |start playing                     |
-|b         |next                              |
-|z         |previous                          |
-|c         |pause                             |
-|v         |stop                              |
-|r         |toggle repeat                     |
-|s         |toggle shuffle                    |
-|1         |view tree (artists and songs list)|
-|space     |expand tree                       |
-|2         |view sorted (songs list)          |
-|3         |view playlist                     |
-|4         |view queue                        |
-|5         |view browser                      |
-|6         |view filters                      |
-|7         |view settings                     |
-|right     |seek forward                      |
-|left      |seek backward                     |
-|q         |quit                              |
------------------------------------------------
-
 usage:
     program [options]
 
@@ -264,7 +150,7 @@ import re
 import sys
 
 name    = "tmux-control"
-version = "2017-06-11T1539Z"
+version = "2024-05-08T1442Z"
 
 def main(options):
 
@@ -280,15 +166,6 @@ def main(options):
     extension_required            = options["--extension"]
     if extension_required.lower() == "none":
         extension_required = None
-
-    prerequisites = [
-        "cmus",
-        "elinks",
-        "htop",
-        "ranger",
-        "tmux"
-    ]
-    ensure_prerequisites(prerequisites)
 
     host_name = os.uname()[1]
     if "cern.ch" in host_name:
@@ -599,7 +476,6 @@ def main(options):
     """
 
     if engage_configuration_run:
-
         filepaths = natural_sort(filepaths_at_directory(
             directory          = directoryname,
             extension_required = extension_required
@@ -620,36 +496,20 @@ def main(options):
         configuration_run += "    select-window -t 0\n"
 
     if engage_configuration_analysis:
-
-        #print("engage configuration analysis")
         configuration_tmux = configuration_analysis
-
     elif engage_configuration_badass:
-        #print("engage configuration badass")
         configuration_tmux = configuration_badass
-
     elif engage_configuration_detail:
-        #print("engage configuration detail")
         configuration_tmux = configuration_detail
-
     elif engage_configuration_edit:
-        #print("engage configuration edit")
         configuration_tmux = configuration_edit
-
     elif engage_configuration_Nvidia:
-        #print("engage configuration Nvidia")
         configuration_tmux = configuration_Nvidia
-
     elif engage_configuration_run:
-        #print("engage configuration run")
         configuration_tmux = configuration_run
-
     elif engage_configuration_work:
-        #print("engage configuration work")
         configuration_tmux = configuration_work
-
     else:
-        #print("engage configuration edit (default)")
         configuration_tmux = configuration_edit
 
     command                                             = \
@@ -661,120 +521,24 @@ def main(options):
         "unlink \"${configuration_tmux}\"; }"
 
     os.system(command)
-
     sys.exit()
 
-def get_keystroke():
-
-    import tty
-    import termios
-    fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd)
-    try:
-        tty.setraw(sys.stdin.fileno())
-        character = sys.stdin.read(1)
-    finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-    return character
-
-def get_y_or_n():
-
-    character = None
-    while character != "y" and character != "n":
-        character = get_keystroke().lower()
-    return character
-
-def ensure_prerequisites(prerequisites):
-
-    successes = {}
-    for prerequisite in prerequisites:
-        if which(prerequisite) is None:
-            success = instate(prerequisite)
-            successes[prerequisite] = success
-    if False in successes.values():
-        print("error: dependencies not met -- continue? (y/n)\n")
-        print(successes)
-        y_or_n = get_y_or_n()
-        if y_or_n == "n":
-            sys.exit()
-
-def instate(program):
-
-    print("instate {program}".format(program = program))
-    if program == "hollywood":
-        if which("apt-get") is None:
-            print(
-                "error: \"apt-get\" not detected -- "
-                "install program \"{program}\" manually".format(
-                    program = program
-                )
-            )
-            success = False
-        else:
-            os.system("sudo apt-add-repository -y ppa:hollywood/ppa")
-            os.system("sudo apt-get -y update")
-            os.system("sudo apt-get -y install byobu hollywood")
-            success = True
-    else:
-        if which("apt-get") is None:
-            print(
-                "error: \"apt-get\" not detected -- "
-                "install program \"{program}\" manually".format(
-                    program = program
-                )
-            )
-            success = False
-        else:
-            command = "sudo apt-get -y install " + program
-            os.system(command)
-            success = True
-
-    return success
-
-def natural_sort(
-    list_object
-    ):
-
+def natural_sort(list_object):
     convert = lambda text: int(text) if text.isdigit() else text.lower()
-    alphanumeric_key = lambda key: [
-        convert(text) for text in re.split("([0-9]+)", key)
-    ]
-
+    alphanumeric_key = lambda key: [convert(text) for text in re.split("([0-9]+)", key)]
     return sorted(list_object, key = alphanumeric_key)
 
-def filepaths_at_directory(
-    directory          = None,
-    extension_required = None
-    ):
-
+def filepaths_at_directory(directory=None, extension_required=None):
     if not os.path.isdir(directory):
-        print("error -- directory {directory} not found".format(directory = directory))
+        print(f"error -- directory {directory} not found")
         raise(IOError)
-    filepaths = [
-        os.path.abspath(os.path.join(directory, filename))\
-        for filename in os.listdir(directory)\
-        if os.path.isfile(os.path.join(directory, filename))
-    ]
+    filepaths = [os.path.abspath(os.path.join(directory, filename))\
+                 for filename in os.listdir(directory)\
+                 if os.path.isfile(os.path.join(directory, filename))]
     if extension_required:
-        filepaths = [filepath for filepath in filepaths if extension_required in os.path.splitext(filepath)[1]]
-
+        filepaths = [filepath for filepath in filepaths if extension_required in\
+                     os.path.splitext(filepath)[1]]
     return filepaths
-
-def which(program):
-
-    def is_exe(fpath):
-        return(os.path.isfile(fpath) and os.access(fpath, os.X_OK))
-    fpath, fname = os.path.split(program)
-    if fpath:
-        if is_exe(program):
-            return(program)
-    else:
-        for path in os.environ["PATH"].split(os.pathsep):
-            path = path.strip('"')
-            exe_file = os.path.join(path, program)
-            if is_exe(exe_file):
-                return(exe_file)
-    return(None)
 
 if __name__ == "__main__":
     options = docopt.docopt(__doc__)

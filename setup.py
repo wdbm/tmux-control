@@ -7,10 +7,9 @@ import setuptools
 import pypandoc
 
 def main():
-
     setuptools.setup(
         name             = "tmux-control",
-        version          = "2017.06.11.1539",
+        version          = "2024.05.08.1442",
         description      = "configure and control tmux",
         long_description = long_description(),
         url              = "https://github.com/wdbm/tmux-control",
@@ -25,10 +24,7 @@ def main():
                            ]
     )
 
-def long_description(
-    filename = "README.md"
-    ):
-
+def long_description(filename="README.md"):
     if os.path.isfile(os.path.expandvars(filename)):
         try:
             import pypandoc
